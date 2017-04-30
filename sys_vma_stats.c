@@ -6,7 +6,7 @@
 #include <asm/page.h>
 #include <asm/mman.h>
 
-asmlinkage int sys_vma_stats(int processID)
+asmlinkage int sys_vmaStatistic(int processID)
 {
         struct task_struct *thisTask;
         struct mm_struct *thisMem;
@@ -45,17 +45,22 @@ asmlinkage int sys_vma_stats(int processID)
                 printk("Total size (End - Start): %lu\n", thisVMA.vm_end - thisVMA.vm_start);
 
                 protection = thisVMA.vm_flags;
-                printk("$$$$ Access permissions of VMA $$$$\n");
+                printk("$$$$ Permission of the VMA $$$$\n");
                 printk("Read --> %s \n", protection&PROT_READ?"yes":"no");
                 printk("Write --> %s \n", protection&PROT_WRITE?"yes":"no");
                 printk("Execute --> %s \n", protection&PROT_EXEC?"yes":"no");
 
-                if (thisVMA.vm_file != NULL) {
+                if (thisVMA.vm_file != NULL)
+                {
                         fileName = d_path(&thisVMA.vm_file->f_path, (char*)__get_free_page(GFP_TEMPORARY), PAGE_SIZE);
                         printk("-> Mapped file: %s\n", fileName);
                 }
                 totalSize += thisVMA.vm_end - thisVMA.vm_start;
-                if (count != numVMAS-1) { thisVMA = *(thisVMA.vm_next); }
+            
+                if (count != numVMAS-1)
+                {
+                    thisVMA = *(thisVMA.vm_next);
+                }
         }
         printk("\n\nThe total VMA space size of all VMAs is %i\n", totalSize);
 

@@ -4,37 +4,42 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <linux/kernel.h>
-
-#define __NR_vma_stats 341
+#define __NR_vmaStatistic 341
 
 pthread_mutex_t    mutex_lock;
 
 
-void * sub_thread( void *arg){
-    pthread_mutex_lock(&mutex_lock);
-    syscall(__NR_vma_stats, getpid());
+void * sthread( void *arg)
+{
     pthread_mutex_unlock(&mutex_lock);
+    pthread_mutex_lock(&mutex_lock);
+    syscall(__NR_vmaStatistic, getpid());
+    
 }
 
 
-int main(int argc, char *argv[]){
-
+int main(int argc, char *argv[])
+{
+    // create threads to test
+    int threads = 2;
     int i;
-    int num_threads = 2;
-
-    pthread_mutex_init(&mutex_lock, NULL);
-
-    pthread_t thread_mem[num_threads];
-
     
-    for( i = 0; i < num_threads; i++ ){
-        pthread_create(&(thread_mem[i]), NULL, (void *) sub_thread, NULL); 
+    pthread_mutex_init(&mutex_lock, NULL);
+    pthread_t threadMem[threads];
+    
+    // creates threads
+    for( i = 0; i < threads; i++ )
+    {
+        pthread_create(&(threadMem[i]), NULL, (void *) sthread, NULL);
     }
-
-    for( i = 0; i < num_threads; i++ ){
-        if(thread_mem[i] != 0) {
-            pthread_join(thread_mem[i],NULL);
+    
+    //makes sure thread execution has finished
+    for( i = 0; i < threads; i++ )
+    {
+        if(threadMem[i] != 0)
+        {
+            pthread_join(threadMem[i],NULL);
         }
     }
-        return 0;
+    return 0;
 }
