@@ -7,9 +7,11 @@
 
 int main(int argc, char *argv[])
 {
-        int pid;
-        printf("Enter a process id: \n");
-        scanf("%d", &pid);
-        syscall(__NR_vma_stats, pid);
+        int processID;
+    
+        // requesst process id to test
+        printf("Enter a process id to test: \n");
+        scanf("%d", &processID);
+        syscall(__NR_vma_stats, processID);
         return 0;
 }

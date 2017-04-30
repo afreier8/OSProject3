@@ -17,7 +17,6 @@ void * sub_thread( void *arg){
 }
 
 
-
 int main(int argc, char *argv[]){
 
     int i;
