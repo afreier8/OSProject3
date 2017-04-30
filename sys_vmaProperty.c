@@ -4,7 +4,7 @@
 #include <asm/pgtable.h>
 #include <linux/mm_types.h>
 
-asmlinkage int sys_vma_props(unsigned long mem, int processID)
+asmlinkage int sys_vmaProperty(unsigned long mem, int processID)
 {
         struct task_struct *task = find_task_by_vpid(processID);
         struct mm_struct *memory = task->active_mm;
