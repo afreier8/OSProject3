@@ -14,14 +14,19 @@ asmlinkage int sys_vmaProperty(unsigned long mem, int processID)
         int reference = 0;
         int dirty = 0;
     
-        // sets up page global directory, page upper directory, page middle directory,
-        // and page table entry pointer
-        pageGlobalDir_t *pageGlobalDir = pageGlobalDir_offset(memory, mem);
-        pageUpperDir_t *pageUpperDir = pageUpperDir_offset(pageGlobalDir, mem);
-        pageMidDir_t *pageMidDir = pageMidDir_offset(pageUpperDir, mem);
-        pageTableEntry_t *pageTableEntryPoint = pageTableEntry_offset_kernel(pageMidDir, mem);
-        pageTableEntry_t pageTableEntry = *pageTableEntryPoint;
-        data = pageTableEntry_present(pageTableEntry);
+        /* sets up page global directory, page upper directory, page middle directory,
+         and page table entry pointer
+         page global directory
+         page upper directory
+         page middle directory
+         page table entry pointer
+         page table entry */
+        pgd_t *pgd = pgd_offset(memory, mem);
+        pud_t *pud = pud_offset(pgd, mem);
+        pmd_t *pmd = pmd_offset(pud, mem);
+        pte_t *ptep = pte_offset_kernel(pmd, mem);
+        pte_t pte = *ptep;
+        data = pte_present(pte);
     
         // prints flags associated with page table entry
         printk("Present flag: %i\n", data?1:0);
