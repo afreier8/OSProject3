@@ -6,7 +6,7 @@
 #include <asm/page.h>
 #include <asm/mman.h>
 
-asmlinkage int sys_vmaStatistic(int processID)
+asmlinkage int sys_vmaStatistic(int pid)
 {
         struct task_struct *thisTask;
         struct mm_struct *thisMem;
@@ -46,9 +46,9 @@ asmlinkage int sys_vmaStatistic(int processID)
 
                 protection = thisVMA.vm_flags;
                 printk("$$$$ Permission of the VMA $$$$\n");
-                printk("Read --> %s \n", protection&PROT_READ?"yes":"no");
-                printk("Write --> %s \n", protection&PROT_WRITE?"yes":"no");
-                printk("Execute --> %s \n", protection&PROT_EXEC?"yes":"no");
+                printk("Read --> %s \n", prot&PROT_READ?"yes":"no");
+                printk("Write --> %s \n", prot&PROT_WRITE?"yes":"no");
+                printk("Execute --> %s \n", prot&PROT_EXEC?"yes":"no");
 
                 if (thisVMA.vm_file != NULL)
                 {

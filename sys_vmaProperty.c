@@ -4,9 +4,9 @@
 #include <asm/pgtable.h>
 #include <linux/mm_types.h>
 
-asmlinkage int sys_vmaProperty(unsigned long mem, int processID)
+asmlinkage int sys_vmaProperty(unsigned long mem, int pid)
 {
-        struct task_struct *task = find_task_by_vpid(processID);
+        struct task_struct *task = find_task_by_vpid(pid);
         struct mm_struct *memory = task->active_mm;
     
         // flags for page table entries
